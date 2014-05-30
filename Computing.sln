@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BHproject", "BHproject\BHproject.csproj", "{850069A0-F1FD-47AE-A597-58C385B8DEFD}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Computing", "BHproject\Computing.csproj", "{850069A0-F1FD-47AE-A597-58C385B8DEFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
