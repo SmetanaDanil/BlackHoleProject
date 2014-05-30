@@ -140,7 +140,7 @@ namespace BHproject
 
         public double dF(int[] a)
         {
-            return;
+            return 0.0;
         }
 
 
