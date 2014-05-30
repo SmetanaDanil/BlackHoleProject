@@ -417,6 +417,8 @@ namespace BHproject
             for (double i = fromr; i <= tor; i+=step)
             {
                 objectdb.R = i;
+                objectdb.Energies.Clear();
+                objectdb.Angles.Clear();
                 randarr = random.RandomizeForSphere(Nphotons);
 
                 for (int j = 0; j < Nphotons; j++)
