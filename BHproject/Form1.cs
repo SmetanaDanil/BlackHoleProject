@@ -29,9 +29,11 @@ namespace BHproject
             GraphicsResults = new List<ObjectsDB>();
         }
 
+        
+
         private void button1_Click(object sender, EventArgs e)
         {
-            PointPairList list = new PointPairList();
+         /*   PointPairList list = new PointPairList();
             double radvec = Convert.ToDouble(textBox2.Text);
             double point_of_view = Convert.ToDouble(textBox1.Text);
             int photon_amount = int.Parse(textBox3.Text) * 1000;
@@ -110,7 +112,7 @@ namespace BHproject
             gr.YAxis.Scale.Min = 0;
             gr.YAxis.Scale.Max = N.Max();
             zedGraphControl1.AxisChange();
-            zedGraphControl1.Invalidate();
+            zedGraphControl1.Invalidate();*/
 
             #region Danya's code
 
@@ -194,6 +196,194 @@ namespace BHproject
              textBox6.Text = Convert.ToString(rphi);
             */
             #endregion
+
+            PointPairList list = new PointPairList();
+            double radvec = Convert.ToDouble(textBox2.Text);
+            double point_of_view = Convert.ToDouble(textBox1.Text);
+            int photon_amount = int.Parse(textBox3.Text) * 1000;
+
+            RandomSphere random = new RandomSphere(null);//R
+
+            double[,] arr = random.RandomizeForSphere(photon_amount);//N
+            // double[,] arr = new double[photon_amount, 2];
+            //   LsodarDll.Lsodar(ref radvec, ref teta, ref phi, out rteta, out rphi, out Energy, ref rcondition);
+            //  ReadRand(arr);
+
+            var theta = new double[photon_amount];
+            var phi = new double[photon_amount];
+            var energies = new double[photon_amount];
+            var rc = new int[photon_amount];
+
+
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = photon_amount;
+            progressBar1.Step = 50000;
+
+            for (int i = 0; i < photon_amount; i++)
+            {
+                theta[i] = arr[i, 0];
+                phi[i] = arr[i, 1];
+                rc[i] = -2;
+            }
+
+            //   DateTime dt = new DateTime();
+            dt = DateTime.Now;
+
+            for (int i = 0; i < photon_amount; i += 50000)
+            {
+                LsodarDll.Lsodar1(ref i, ref radvec, ref photon_amount, theta, phi, energies, rc);
+                progressBar1.PerformStep();
+            }
+
+            //DateTime dt1 = new DateTime();
+            //dt1 = DateTime.Now;
+            textBox4.Text = Convert.ToString(DateTime.Now - dt);
+            //Dasha's part of code
+
+            // LsodarDll.Lsodar1(ref radvec, ref photon_amount, theta, phi, energies, rc);
+            List<int> Energies = new List<int>();
+            List<int> N = new List<int>();
+
+            //  int count = 0;
+
+            for (int i = 0; i < photon_amount; i++)
+            {
+                if (rc[i] == 0)
+
+                    if (theta[i] <= point_of_view + 0.2 && theta[i] >= point_of_view - 0.2)
+                    {
+                        Energies.Add(Convert.ToInt32(energies[i] * 100.0));
+                        //  count++;
+                    }
+
+            }
+
+
+            int count1;
+            double max = Energies.Max();
+
+            while (Energies.Count > 0)
+            {
+                eq = Energies[0];
+                count1 = Energies.Count;
+                Energies.RemoveAll(Equal);
+                list.Add(eq, -Energies.Count + count1);
+                N.Add(-Energies.Count + count1);
+
+            }
+            list.Sort();
+            gr.CurveList.Clear();
+
+
+
+            LineItem myCurve = gr.AddCurve("Spectr", list, Color.Red, SymbolType.Diamond);
+
+
+            myCurve.Line.IsVisible = true;
+
+
+            myCurve.Symbol.Fill.Color = Color.Red;
+
+
+            myCurve.Symbol.Fill.Type = FillType.Solid;
+
+
+            myCurve.Symbol.Size = 5;
+
+
+            gr.XAxis.Scale.Min = 0;
+            gr.XAxis.Scale.Max = max;
+
+
+            gr.YAxis.Scale.Min = 0;
+            gr.YAxis.Scale.Max = N.Max();
+
+
+            zedGraphControl1.AxisChange();
+
+
+            zedGraphControl1.Invalidate();
+
+            // textBox5.Text = Convert.ToString(DateTime.Now - dt1);
+
+
+            /*     //Danya's part of code
+                 list.Clear();
+                 double rteta, Energy;
+                 for (int i = 0; i < photon_amount; i++)
+                 {
+                     if (rc[i] == 0)
+                     {
+                         rteta = theta[i];
+                         Energy = energies[i];
+                         if (rteta <= point_of_view + 1.0 && rteta >= point_of_view - 1.0)
+                         {
+                             int f = (int)(Energy * 1000) - 500;
+                             photons[f]++;
+                         }
+                     }
+                 }
+
+
+                 gr1.CurveList.Clear();
+                 for (int i = 0; i < photons.Length; i++)
+                 {
+                     if (photons[i] != 0) list.Add(i + 500, photons[i]);
+                 }
+
+                 LineItem myCurve1 = gr1.AddCurve("Spectr", list, Color.Blue, SymbolType.Diamond);
+
+
+                 myCurve1.Line.IsVisible = true;
+
+
+                 myCurve1.Symbol.Fill.Color = Color.Blue;
+
+
+                 myCurve1.Symbol.Fill.Type = FillType.Solid;
+
+
+                 myCurve1.Symbol.Size = 5;
+
+
+
+                 gr1.XAxis.Scale.Min = 700;
+                 gr1.XAxis.Scale.Max = 2000;
+
+
+                 gr1.YAxis.Scale.Min = 0;
+                 gr1.YAxis.Scale.Max = photons.Max();
+
+
+                 zedGraphControl3.AxisChange();
+
+                 zedGraphControl3.Invalidate();
+
+                 /*switch (rcondition)
+                 {
+                     case 0:
+                         {
+                             textBox4.Text = "В бесконечность";
+                             break;
+                         }
+                     case 1:
+                         {
+                             textBox4.Text = "В диск";
+                             break;
+                         }
+                     case 2:
+                         {
+                             textBox4.Text = "В дыру";
+                             break;
+                         }
+                     default:
+                         break;
+                 }*/
+            /* textBox7.Text = Convert.ToString(Energy);
+             textBox5.Text = Convert.ToString(rteta);
+             textBox6.Text = Convert.ToString(rphi);
+            */
+
         }
 
 
