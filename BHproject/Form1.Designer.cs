@@ -62,6 +62,9 @@
             this.label11 = new System.Windows.Forms.Label();
             this.steptextBox = new System.Windows.Forms.TextBox();
             this.button5 = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.numbgraphtextBox = new System.Windows.Forms.TextBox();
+            this.progressBar2 = new System.Windows.Forms.ProgressBar();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -338,11 +341,37 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(263, 543);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(48, 13);
+            this.label12.TabIndex = 40;
+            this.label12.Text = "Индекс:";
+            // 
+            // numbgraphtextBox
+            // 
+            this.numbgraphtextBox.Location = new System.Drawing.Point(340, 540);
+            this.numbgraphtextBox.Name = "numbgraphtextBox";
+            this.numbgraphtextBox.Size = new System.Drawing.Size(100, 20);
+            this.numbgraphtextBox.TabIndex = 41;
+            // 
+            // progressBar2
+            // 
+            this.progressBar2.Location = new System.Drawing.Point(229, 471);
+            this.progressBar2.Name = "progressBar2";
+            this.progressBar2.Size = new System.Drawing.Size(1005, 23);
+            this.progressBar2.TabIndex = 42;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1244, 657);
+            this.Controls.Add(this.progressBar2);
+            this.Controls.Add(this.numbgraphtextBox);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.steptextBox);
             this.Controls.Add(this.label11);
@@ -416,6 +445,9 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox steptextBox;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox numbgraphtextBox;
+        private System.Windows.Forms.ProgressBar progressBar2;
     }
 }
 

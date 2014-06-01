@@ -56,10 +56,11 @@ namespace BHproject
             }
         }
 
-        public ObjectsDB()
+        public ObjectsDB(double r, List<double> energies, List<double> angles)
         {
-            energies = new List<double>();
-            angles = new List<double>();
+            this.r = r;
+            this.energies = energies;
+            this.angles = angles;
         }
     }
 }

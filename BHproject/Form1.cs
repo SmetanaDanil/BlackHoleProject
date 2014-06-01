@@ -65,10 +65,8 @@ namespace BHproject
                 LsodarDll.Lsodar1(ref i, ref radvec, ref photon_amount, theta, phi, energies, rc);
                 progressBar1.PerformStep();
             }
-        
 
-            textBox4.Text = Convert.ToString(DateTime.Now - dt);
-    
+            textBox4.Text = Convert.ToString(DateTime.Now - dt);   
 
 
             //angles
@@ -87,6 +85,7 @@ namespace BHproject
 
             int count1;
             double max = Energies.Max();
+
             //0
             list.Add(Energies.Min()-1, 0);
             list.Add(Energies.Max()+1, 0);
@@ -100,6 +99,7 @@ namespace BHproject
                 N.Add(-Energies.Count + count1);
 
             }
+
             list.Sort();
             gr.CurveList.Clear();
 
@@ -199,8 +199,8 @@ namespace BHproject
              textBox6.Text = Convert.ToString(rphi);
             */
             #endregion
-
-       /*     PointPairList list = new PointPairList();
+            #region Old code
+            /*     PointPairList list = new PointPairList();
             double radvec = Convert.ToDouble(textBox2.Text);
             double point_of_view = Convert.ToDouble(textBox1.Text);
             int photon_amount = int.Parse(textBox3.Text) * 1000;
@@ -386,7 +386,7 @@ namespace BHproject
              textBox5.Text = Convert.ToString(rteta);
              textBox6.Text = Convert.ToString(rphi);
             */
-
+            #endregion
         }
 
 
@@ -600,18 +600,20 @@ namespace BHproject
             var energies = new double[Nphotons];
             var rc = new int[Nphotons];
 
-            progressBar1.Minimum = 0;
-            progressBar1.Maximum = Nphotons;
-            progressBar1.Step = 50000;
+            progressBar2.Minimum = 0;
+            progressBar2.Maximum = Nphotons;
+            progressBar2.Step = 50000;
 
             dt = DateTime.Now;
-            ObjectsDB objectdb = new ObjectsDB();
 
+            List<double> Energies = new List<double>();
+            List<double> Angles = new List<double>();
             for (double i = fromr; i <= tor; i+=step)
             {
-                objectdb.R = i;
-                objectdb.Energies.Clear();
-                objectdb.Angles.Clear();
+               
+                Energies.Clear();
+                Angles.Clear();
+
                 randarr = random.RandomizeForSphere(Nphotons);
 
                 for (int j = 0; j < Nphotons; j++)
@@ -619,27 +621,29 @@ namespace BHproject
                     theta[j] = randarr[j, 0];
                     phi[j] = randarr[j, 1];
                     rc[j] = -2;
-                }              
+                }
+
+                progressBar2.Value = 0;
 
                 for (int g = 0; g < Nphotons; g += 50000)
                 {
                     LsodarDll.Lsodar1(ref g, ref i, ref Nphotons, theta, phi, energies, rc);
-                    progressBar1.PerformStep();
+                    progressBar2.PerformStep();
                 }
 
                 for (int j = 0; j < Nphotons; j++)
                 {
                     if (rc[j] == 0)
                     {
-                        objectdb.Angle = theta[j];
-                        objectdb.Energy = energies[j]*100.0;
+                        Angles. Add (theta[j]);
+                        Energies.Add(energies[j] * 100.0);
                     }
                 }
 
-                    progressBar1.Value = 0;
-                    GraphicsResults.Add(objectdb);
+                   
+                    GraphicsResults.Add(new ObjectsDB(i, new List<double>(Energies), new List<double>(Angles)));
             }
-
+           
             textBox4.Text = Convert.ToString(DateTime.Now - dt);
             fail = false;
         }
@@ -647,20 +651,24 @@ namespace BHproject
         private void button5_Click(object sender, EventArgs e)
         {
             double point_of_view = Convert.ToDouble(textBox1.Text);
+            int k = Convert.ToInt32(numbgraphtextBox.Text);
         
                 List<int> Energies = new List<int>();
                 List<int> N = new List<int>();
                 
-                for (int i = 0; i < GraphicsResults[0].Energies.Count; i++)
+                for (int i = 0; i < GraphicsResults[k].Energies.Count; i++)
                 {
-                    if (GraphicsResults[0].Angles[i] <= point_of_view + 0.2 && GraphicsResults[0].Angles[i] >= point_of_view - 0.2)
-                            Energies.Add(Convert.ToInt32(GraphicsResults[0].Energies[i]));
+                    if (GraphicsResults[k].Angles[i] <= point_of_view + 0.2 && GraphicsResults[k].Angles[i] >= point_of_view - 0.2)
+                            Energies.Add(Convert.ToInt32(GraphicsResults[k].Energies[i]));
 
                 }
 
                 int count1;
                 double max = Energies.Max();
                 PointPairList list = new PointPairList();
+
+                list.Add(Energies.Min() - 1, 0);
+                list.Add(Energies.Max() + 1, 0);
 
                 while (Energies.Count > 0)
                 {
@@ -672,15 +680,15 @@ namespace BHproject
 
                 }
                 list.Sort();
-                // gr.CurveList.Clear();
+                //gr.CurveList.Clear();
 
 
 
-                LineItem myCurve = gr.AddCurve("Spectr", list, Color.Red, SymbolType.None);
-                myCurve.Line.IsVisible = true;
-                myCurve.Symbol.Fill.Color = Color.Red;
-                myCurve.Symbol.Fill.Type = FillType.Solid;
-                myCurve.Symbol.Size = 5;
+                LineItem myCurve1 = gr.AddCurve("Spectr", list, Color.Blue, SymbolType.None);
+                myCurve1.Line.IsVisible = true;
+                myCurve1.Symbol.Fill.Color = Color.Red;
+                myCurve1.Symbol.Fill.Type = FillType.Solid;
+                myCurve1.Symbol.Size = 5;
                 gr.XAxis.Scale.Min = 0;
                 gr.XAxis.Scale.Max = max;
                 gr.YAxis.Scale.Min = 0;
