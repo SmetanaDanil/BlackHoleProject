@@ -603,14 +603,23 @@ namespace BHproject
             progressBar2.Minimum = 0;
             progressBar2.Maximum = Nphotons;
             progressBar2.Step = 50000;
+            progressBar2.Value = 0;
+
+            progressBar3.Minimum = 0;
+            progressBar3.Maximum = Convert.ToInt32((-fromr + tor + 1)/step);
+            progressBar3.Step = 1;
+            progressBar3.Value = 0;
+
 
             dt = DateTime.Now;
 
             List<double> Energies = new List<double>();
             List<double> Angles = new List<double>();
-            for (double i = fromr; i <= tor; i+=step)
+
+            for (double i = fromr; i <= tor; i += step)
             {
-               
+                progressBar3.PerformStep();
+
                 Energies.Clear();
                 Angles.Clear();
 
@@ -635,13 +644,12 @@ namespace BHproject
                 {
                     if (rc[j] == 0)
                     {
-                        Angles. Add (theta[j]);
+                        Angles.Add(theta[j]);
                         Energies.Add(energies[j] * 100.0);
                     }
                 }
 
-                   
-                    GraphicsResults.Add(new ObjectsDB(i, new List<double>(Energies), new List<double>(Angles)));
+                GraphicsResults.Add(new ObjectsDB(i, new List<double>(Energies), new List<double>(Angles)));
             }
            
             textBox4.Text = Convert.ToString(DateTime.Now - dt);
@@ -681,7 +689,8 @@ namespace BHproject
                 }
                 list.Sort();
                 //gr.CurveList.Clear();
-
+                /*Будь осторожен! Если ты будешь присваивать этот лист другому листу, то присвоится только ссылка (знаю, что кэп). Чтобы скопировать один лист в другой используется:
+               List<double> List2=  new List<double>(List1)*  List2  - копия List1 (именно копия, а не ссылка)*/
 
 
                 LineItem myCurve1 = gr.AddCurve("Spectr", list, Color.Blue, SymbolType.None);

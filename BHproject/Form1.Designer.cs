@@ -65,6 +65,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.numbgraphtextBox = new System.Windows.Forms.TextBox();
             this.progressBar2 = new System.Windows.Forms.ProgressBar();
+            this.progressBar3 = new System.Windows.Forms.ProgressBar();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -364,11 +365,19 @@
             this.progressBar2.Size = new System.Drawing.Size(1005, 23);
             this.progressBar2.TabIndex = 42;
             // 
+            // progressBar3
+            // 
+            this.progressBar3.Location = new System.Drawing.Point(229, 604);
+            this.progressBar3.Name = "progressBar3";
+            this.progressBar3.Size = new System.Drawing.Size(1005, 23);
+            this.progressBar3.TabIndex = 43;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1244, 657);
+            this.Controls.Add(this.progressBar3);
             this.Controls.Add(this.progressBar2);
             this.Controls.Add(this.numbgraphtextBox);
             this.Controls.Add(this.label12);
@@ -448,6 +457,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox numbgraphtextBox;
         private System.Windows.Forms.ProgressBar progressBar2;
+        private System.Windows.Forms.ProgressBar progressBar3;
     }
 }
 
