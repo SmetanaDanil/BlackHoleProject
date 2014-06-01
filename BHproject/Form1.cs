@@ -33,7 +33,7 @@ namespace BHproject
 
         private void button1_Click(object sender, EventArgs e)
         {
-         /*   PointPairList list = new PointPairList();
+            PointPairList list = new PointPairList();
             double radvec = Convert.ToDouble(textBox2.Text);
             double point_of_view = Convert.ToDouble(textBox1.Text);
             int photon_amount = int.Parse(textBox3.Text) * 1000;
@@ -87,6 +87,9 @@ namespace BHproject
 
             int count1;
             double max = Energies.Max();
+            //0
+            list.Add(Energies.Min()-1, 0);
+            list.Add(Energies.Max()+1, 0);
 
             while (Energies.Count > 0)
             {
@@ -102,7 +105,7 @@ namespace BHproject
 
             
 
-            LineItem myCurve = gr.AddCurve("Spectr", list, Color.Red, SymbolType.Diamond);
+            LineItem myCurve = gr.AddCurve("Spectr", list, Color.Red, SymbolType.None);
             myCurve.Line.IsVisible = true;
             myCurve.Symbol.Fill.Color = Color.Red;
             myCurve.Symbol.Fill.Type = FillType.Solid;
@@ -112,7 +115,7 @@ namespace BHproject
             gr.YAxis.Scale.Min = 0;
             gr.YAxis.Scale.Max = N.Max();
             zedGraphControl1.AxisChange();
-            zedGraphControl1.Invalidate();*/
+            zedGraphControl1.Invalidate();
 
             #region Danya's code
 
@@ -197,7 +200,7 @@ namespace BHproject
             */
             #endregion
 
-            PointPairList list = new PointPairList();
+       /*     PointPairList list = new PointPairList();
             double radvec = Convert.ToDouble(textBox2.Text);
             double point_of_view = Convert.ToDouble(textBox1.Text);
             int photon_amount = int.Parse(textBox3.Text) * 1000;
@@ -643,7 +646,7 @@ namespace BHproject
 
         private void button5_Click(object sender, EventArgs e)
         {
-            double point_of_view = 30;
+            double point_of_view = Convert.ToDouble(textBox1.Text);
         
                 List<int> Energies = new List<int>();
                 List<int> N = new List<int>();
@@ -673,7 +676,7 @@ namespace BHproject
 
 
 
-                LineItem myCurve = gr.AddCurve("Spectr", list, Color.Red, SymbolType.Diamond);
+                LineItem myCurve = gr.AddCurve("Spectr", list, Color.Red, SymbolType.None);
                 myCurve.Line.IsVisible = true;
                 myCurve.Symbol.Fill.Color = Color.Red;
                 myCurve.Symbol.Fill.Type = FillType.Solid;
