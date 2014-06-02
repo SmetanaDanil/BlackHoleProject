@@ -11,6 +11,7 @@ namespace BHproject
     {
         public const int Neq = 2;
         public const int Bits = Neq * 32 - 1;
+        public const int Bits1 = 31;
         public const int CrossingConst = 30;
         public const double unluckiers = 0.1;
         public const double elite = 0.2;
@@ -63,9 +64,7 @@ namespace BHproject
 
         public void CrossingOver(int[] p1, int[] p2, int[] f1, int[] f2)
         {
-            //choose a point of crossingover
             int number_of_crossing = (int)CDll1.Rand(0, Neq);
-            int point_of_crossing = (int)CDll1.Rand(1, Bits - 1);
 
             //inside and outside the bit of crossing
             for (int i = 0; i < number_of_crossing; i++)
@@ -79,19 +78,23 @@ namespace BHproject
                 f2[i] = p2[i];
             }
 
-            //in the bit of crossing
-            int m = Bits - point_of_crossing;
+            int tempp1 = (int)(p1[number_of_crossing] * 100.0);
+            int tempp2 = (int)(p2[number_of_crossing] * 100.0);
 
+           
+            //in the bit of crossing
+            int point_of_crossing = (int)CDll1.Rand(1, Bits1);
             int x = 0, y = 0;
 
-            for (int i = m; i < Bits; i++)
+            for (int i = point_of_crossing; i < Bits1; i++)
                 x += (int)Math.Pow(2, i);
 
-            for (int i = 0; i < m; i++)
+            for (int i = 0; i < point_of_crossing; i++)
                 y += (int)Math.Pow(2, i);
 
-            f1[number_of_crossing] = p1[number_of_crossing] & x + p2[number_of_crossing] & y;
-            f2[number_of_crossing] = p2[number_of_crossing] & x + p2[number_of_crossing] & y;
+            f1[number_of_crossing] = ((tempp1 & x) + (tempp2 & y)) / 100.0;
+            f2[number_of_crossing] = ((tempp2 & x) + (tempp1 & y)) / 100.0;
+
         }
 
         public void Mutations()
