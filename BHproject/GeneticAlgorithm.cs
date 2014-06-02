@@ -15,11 +15,14 @@ namespace BHproject
         public const int Bits = Neq * 32 - 1;
         public const int CrossingConst = 30;
         public const int thebest = 100;
-        public const int unluckiers = 50;
+        public const double unluckiers = 0.1;
+        public const double elite = 0.2;
+ 
 
         int startN;
         int P; //P(mutation)
         double E; //convergence
+        int max;
 
         List<int[]> individuals;
 
@@ -120,17 +123,24 @@ namespace BHproject
             }
         }
 
-        public void Selection()
+        public void Selection()//ОПТИМИЗИРОВАТЬ ЭТОТ КОШМАР
         {
             //fitness
-            double[,] fitness = new double[individuals.Count, 2];//ОПТИМИЗИРОВАТЬ!!!
+            List<double> fitness = new List<double>();
             for (int i = 0; i < individuals.Count; i++)
-            {
-                fitness[i, 0] = dF(individuals[i]);
-                fitness[i, 1] = i;
-            }
-           
+                fitness.Add(dF(individuals[i]));
 
+            int eliteIndividuals = Convert.ToInt16(individuals.Count - individuals.Count * elite);
+            int unluckyIndividuals = Convert.ToInt16(individuals.Count - individuals.Count * unluckiers);
+
+            List<double> TempFitness = new List<double>(fitness);
+
+
+        }
+
+        bool Equal(int fitness)
+        {
+            return fitness == max;
         }
 
         public int comparison(double[] x,double []y)
