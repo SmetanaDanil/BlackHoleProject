@@ -9,8 +9,6 @@ namespace BHproject
 
     class GeneticAlgorithm
     {
-
-
         public const int Neq = 13;
         public const int Bits = Neq * 32 - 1;
         public const int CrossingConst = 30;
@@ -123,29 +121,65 @@ namespace BHproject
             }
         }
 
-        public void Selection()//ОПТИМИЗИРОВАТЬ ЭТОТ КОШМАР
+        public int Selection()//ОПТИМИЗИРОВАТЬ ЭТОТ КОШМАР
         {
             //fitness
             List<double> fitness = new List<double>();
             for (int i = 0; i < individuals.Count; i++)
                 fitness.Add(dF(individuals[i]));
 
-            int eliteIndividuals = Convert.ToInt16(individuals.Count - individuals.Count * elite);
-            int unluckyIndividuals = Convert.ToInt16(individuals.Count - individuals.Count * unluckiers);
+            //check convergence
+            if (fitness.Min() <= E)
+                return fitness.LastIndexOf(fitness.Min());
+
+            int eliteIndividuals = Convert.ToInt16(individuals.Count * elite);
+            int unluckyIndividuals = Convert.ToInt16(individuals.Count * unluckiers);
 
             List<double> TempFitness = new List<double>(fitness);
+            List<int[]> Tempind = new List<int[]>();
 
+            int ind = 0;
+            
+            //choose the best
+            for (int i = 0; i < eliteIndividuals; i++)
+            {
+                ind = fitness.LastIndexOf(TempFitness.Min());
+                Tempind.Add(individuals[ind]);
+                TempFitness.Remove(TempFitness.Min());
+            }
 
+            //choose the worst
+            for (int i = 0; i < unluckyIndividuals; i++)
+            {
+                ind = fitness.LastIndexOf(TempFitness.Max());
+                Tempind.Add(individuals[ind]);
+                TempFitness.Remove(TempFitness.Max());
+            }
+
+            int new_ind = individuals.Count - Tempind.Count;
+
+            this.individuals = new List<int[]>(Tempind);
+            GenerateNewIndividuals(new_ind);
+
+            return -1;
         }
 
-        bool Equal(int fitness)
+        public int[] Start()
         {
-            return fitness == max;
-        }
+            GenerateNewIndividuals(startN);
+            Crossing();
+            Mutations();
 
-        public int comparison(double[] x,double []y)
-        {
-            return (x[0] as IComparable).CompareTo(y[0]);
+            int result = Selection();
+
+            while (result == -1)
+            {
+                Crossing();
+                Mutations();
+                result = Selection();
+            }
+
+            return individuals[result];
         }
 
         public double dF(int[] a)
