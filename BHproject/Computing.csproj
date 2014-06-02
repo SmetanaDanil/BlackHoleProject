@@ -65,6 +65,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="GeneticAlgorithm.cs" />
+    <Compile Include="GeneticsTests.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GeneticsTests.Designer.cs">
+      <DependentUpon>GeneticsTests.cs</DependentUpon>
+    </Compile>
     <Compile Include="LsodarDll.cs" />
     <Compile Include="ObjectsDB.cs" />
     <Compile Include="Program.cs" />
@@ -72,6 +78,9 @@
     <Compile Include="RandomSphere.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GeneticsTests.resx">
+      <DependentUpon>GeneticsTests.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -9,10 +9,9 @@ namespace BHproject
 
     class GeneticAlgorithm
     {
-        public const int Neq = 13;
+        public const int Neq = 2;
         public const int Bits = Neq * 32 - 1;
         public const int CrossingConst = 30;
-        public const int thebest = 100;
         public const double unluckiers = 0.1;
         public const double elite = 0.2;
  
@@ -65,7 +64,7 @@ namespace BHproject
         public void CrossingOver(int[] p1, int[] p2, int[] f1, int[] f2)
         {
             //choose a point of crossingover
-            int number_of_crossing = (int)CDll1.Rand(1, Neq);
+            int number_of_crossing = (int)CDll1.Rand(0, Neq);
             int point_of_crossing = (int)CDll1.Rand(1, Bits - 1);
 
             //inside and outside the bit of crossing
@@ -84,6 +83,7 @@ namespace BHproject
             int m = Bits - point_of_crossing;
 
             int x = 0, y = 0;
+
             for (int i = m; i < Bits; i++)
                 x += (int)Math.Pow(2, i);
 
@@ -184,10 +184,10 @@ namespace BHproject
 
         public double dF(int[] a)
         {
+            //y = x^2 + 1
+
             return 0.0;
         }
-
-
 
     }
 }

@@ -588,72 +588,90 @@ namespace BHproject
 
         private void button4_Click(object sender, EventArgs e)
         {
-            double fromr = Convert.ToDouble(fromtextBox.Text);
-            double tor = Convert.ToDouble(totextBox.Text);
-            double step = Convert.ToDouble(steptextBox.Text);
-            int Nphotons = Convert.ToInt16(CountTextBox.Text) * 1000;
-
-            RandomSphere random = new RandomSphere(null);
-            double[,] randarr;
-            var theta = new double[Nphotons];
-            var phi = new double[Nphotons];
-            var energies = new double[Nphotons];
-            var rc = new int[Nphotons];
-
-            progressBar2.Minimum = 0;
-            progressBar2.Maximum = Nphotons;
-            progressBar2.Step = 50000;
-            progressBar2.Value = 0;
-
-            progressBar3.Minimum = 0;
-            progressBar3.Maximum = Convert.ToInt32((-fromr + tor + 1)/step);
-            progressBar3.Step = 1;
-            progressBar3.Value = 0;
-
-
-            dt = DateTime.Now;
-
-            List<double> Energies = new List<double>();
-            List<double> Angles = new List<double>();
-
-            for (double i = fromr; i <= tor; i += step)
+            String path;
+            IFormatter formatter = new BinaryFormatter();
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                progressBar3.PerformStep();
 
-                Energies.Clear();
-                Angles.Clear();
-
-                randarr = random.RandomizeForSphere(Nphotons);
-
-                for (int j = 0; j < Nphotons; j++)
+                if ((path = saveFileDialog1.FileName) != null)
                 {
-                    theta[j] = randarr[j, 0];
-                    phi[j] = randarr[j, 1];
-                    rc[j] = -2;
-                }
+                    Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read);
 
-                progressBar2.Value = 0;
 
-                for (int g = 0; g < Nphotons; g += 50000)
-                {
-                    LsodarDll.Lsodar1(ref g, ref i, ref Nphotons, theta, phi, energies, rc);
-                    progressBar2.PerformStep();
-                }
+                    double fromr = Convert.ToDouble(fromtextBox.Text);
+                    double tor = Convert.ToDouble(totextBox.Text);
+                    double step = Convert.ToDouble(steptextBox.Text);
+                    int Nphotons = Convert.ToInt16(CountTextBox.Text) * 1000;
 
-                for (int j = 0; j < Nphotons; j++)
-                {
-                    if (rc[j] == 0)
+                    RandomSphere random = new RandomSphere(null);
+                    double[,] randarr;
+                    var theta = new double[Nphotons];
+                    var phi = new double[Nphotons];
+                    var energies = new double[Nphotons];
+                    var rc = new int[Nphotons];
+
+                    progressBar2.Minimum = 0;
+                    progressBar2.Maximum = Nphotons;
+                    progressBar2.Step = 50000;
+                    progressBar2.Value = 0;
+
+                    progressBar3.Minimum = 0;
+                    progressBar3.Maximum = Convert.ToInt32((-fromr + tor + 1) / step);
+                    progressBar3.Step = 1;
+                    progressBar3.Value = 0;
+
+
+                    dt = DateTime.Now;
+
+                    List<double> Energies = new List<double>();
+                    List<double> Angles = new List<double>();
+
+                    for (double i = fromr; i <= tor; i += step)
                     {
-                        Angles.Add(theta[j]);
-                        Energies.Add(energies[j] * 100.0);
-                    }
-                }
+                        phi = new double[Nphotons];
+                        theta = new double[Nphotons];
 
-                GraphicsResults.Add(new ObjectsDB(i, new List<double>(Energies), new List<double>(Angles)));
+                        progressBar3.PerformStep();
+                        Energies.Clear();
+                        Angles.Clear();
+
+                        randarr = random.RandomizeForSphere(Nphotons);
+
+                        for (int j = 0; j < Nphotons; j++)
+                        {
+                            theta[j] = randarr[j, 0];
+                            phi[j] = randarr[j, 1];
+                            rc[j] = -2;
+                        }
+
+                        progressBar2.Value = 0;
+
+                        for (int g = 0; g < Nphotons; g += 50000)
+                        {
+                            LsodarDll.Lsodar1(ref g, ref i, ref Nphotons, theta, phi, energies, rc);
+                            progressBar2.PerformStep();
+                        }
+
+                        for (int j = 0; j < Nphotons; j++)
+                        {
+                            if (rc[j] == 0)
+                            {
+                                Angles.Add(theta[j]);
+                                Energies.Add(energies[j] * 100.0);
+                            }
+                        }
+
+                        formatter.Serialize(stream, new ObjectsDB(i, new List<double>(Energies), new List<double>(Angles)));
+                     //   GraphicsResults.Add(new ObjectsDB(i, new List<double>(Energies), new List<double>(Angles)));
+                    }
+
+                    textBox4.Text = Convert.ToString(DateTime.Now - dt);
+                    fail = false;
+                    stream.Close();
+                    MessageBox.Show("Запись успешно завершена!");
+                }
             }
            
-            textBox4.Text = Convert.ToString(DateTime.Now - dt);
-            fail = false;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -705,6 +723,12 @@ namespace BHproject
                 zedGraphControl1.AxisChange();
                 zedGraphControl1.Invalidate();
             
+        }
+
+        private void testsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GeneticsTests f2 = new GeneticsTests();
+            f2.ShowDialog();
         }
     }
 }
