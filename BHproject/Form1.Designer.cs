@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -125,7 +126,7 @@
             this.zedGraphControl1.ScrollMinX = 0D;
             this.zedGraphControl1.ScrollMinY = 0D;
             this.zedGraphControl1.ScrollMinY2 = 0D;
-            this.zedGraphControl1.Size = new System.Drawing.Size(1005, 385);
+            this.zedGraphControl1.Size = new System.Drawing.Size(368, 385);
             this.zedGraphControl1.TabIndex = 16;
             // 
             // textBox3
@@ -223,7 +224,7 @@
             this.toolStripSplitButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1488, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1731, 25);
             this.toolStrip1.TabIndex = 28;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -403,18 +404,18 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(1263, 37);
+            this.textBox7.Location = new System.Drawing.Point(613, 37);
             this.textBox7.Multiline = true;
             this.textBox7.Name = "textBox7";
             this.textBox7.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox7.Size = new System.Drawing.Size(203, 428);
+            this.textBox7.Size = new System.Drawing.Size(853, 369);
             this.textBox7.TabIndex = 46;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1488, 657);
+            this.ClientSize = new System.Drawing.Size(1731, 657);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.button6);

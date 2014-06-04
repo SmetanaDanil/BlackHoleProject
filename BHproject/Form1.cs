@@ -11,6 +11,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 
 namespace BHproject
 {
@@ -736,10 +737,21 @@ namespace BHproject
 
         private void button6_Click(object sender, EventArgs e)
         {
-            double[] result = GeneticsTestsFull.TestSquareFunc();
+            PrintNumb printer = new PrintNumb(ChangeText);
+
+            double[] result = GeneticsTestsFull.TestSquareFunc(printer);
 
             foreach (double x in result)
                 textBox6.Text += Convert.ToString(x) + Environment.NewLine;
+        }
+
+        void ChangeText(double[] arr, double dy)
+        {
+            textBox7.Invoke(new Action(() => textBox7.Text = Convert.ToInt32(arr[0]) + " " + Convert.ToInt32(arr[1]) + " " + Convert.ToInt32(arr[2]) + Environment.NewLine + dy));
+            textBox7.Update();
+            textBox7.SelectionStart = textBox7.SelectionLength;
+            textBox7.ScrollToCaret();
+      
         }
     }
 }

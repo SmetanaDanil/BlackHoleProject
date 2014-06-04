@@ -72,6 +72,7 @@
     <Compile Include="GeneticsTests.Designer.cs">
       <DependentUpon>GeneticsTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="KFunction.cs" />
     <Compile Include="LsodarDll.cs" />
     <Compile Include="ObjectsDB.cs" />
     <Compile Include="Program.cs" />
