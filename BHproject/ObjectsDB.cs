@@ -8,7 +8,8 @@ namespace BHproject
   [Serializable]
     class ObjectsDB
     {
-        double r;
+      int n;
+      double r;
       List<double> energies;
       List<double> angles;
 
@@ -21,6 +22,18 @@ namespace BHproject
             get
             {
                 return r;
+            }
+        }
+
+        public int N
+        {
+            set
+            {
+                n = value;
+            }
+            get
+            {
+                return n;
             }
         }
 
@@ -56,8 +69,9 @@ namespace BHproject
             }
         }
 
-        public ObjectsDB(double r, List<double> energies, List<double> angles)
+        public ObjectsDB(int n, double r, List<double> energies, List<double> angles)
         {
+            this.n = n;
             this.r = r;
             this.energies = energies;
             this.angles = angles;

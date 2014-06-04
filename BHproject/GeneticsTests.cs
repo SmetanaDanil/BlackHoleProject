@@ -61,5 +61,35 @@ namespace BHproject
             foreach (double o in f2)
                 textBox4.Text += o + " ";
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int Bits = 32;
+            int  point_of_mutation;
+            
+            double b = Convert.ToDouble(textBox6.Text);
+            int a = Convert.ToInt32(b * 100.0);
+
+            //main part
+            point_of_mutation = (int)CDll1.Rand(1, Bits - 1);
+            textBox8.Text = Convert.ToString(point_of_mutation);
+
+            int x = 0;
+            for (int i = 0; i < point_of_mutation; i++)
+                x += (int)Math.Pow(2, i);
+
+            int y = 0;
+            for (int i = point_of_mutation + 1; i < Bits - 1; i++)
+                y += (int)Math.Pow(2, i);
+
+            int result = (x&a) + (y&a) + ((~a) & ((int)Math.Pow(2, point_of_mutation)));//true
+
+            double result1 = result / 100.0;
+            textBox7.Text = Convert.ToString(result1);
+
+            //other part
+            b += Math.Pow(2, point_of_mutation);
+            textBox9.Text = Convert.ToString(b);
+        }
     }
 }

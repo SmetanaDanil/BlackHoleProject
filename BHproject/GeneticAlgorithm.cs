@@ -15,39 +15,53 @@ namespace BHproject
         public const int CrossingConst = 30;
         public const double unluckiers = 0.1;
         public const double elite = 0.2;
- 
+        public const int Max = 10;
 
         int startN;
         int P; //P(mutation)
         double E; //convergence
-        int max;
+        double[,] Function;
 
-        List<int[]> individuals;
+        List<double[]> individuals;
 
-        public GeneticAlgorithm(int startN, int P, double E)
+        public GeneticAlgorithm(int startN, int P, double E, double[,] Function)
         {
             this.P = P;
             this.startN = startN;
-            individuals = new List<int[]>();
+            this.Function = Function;
+            individuals = new List<double[]>();
         }
 
         public void GenerateNewIndividuals(int N)
         {
-            int[] a = new int[Neq];
+            double[] a = new double[Neq];
+
             for (int i = 0; i < N; i++)
             {
-                for (int j = 0; i < Neq; j++)
-                    a[j] = Convert.ToInt32(CDll1.Rand(0.0, 100.0));
-                individuals.Add(a);
+                for (int j = 0; j < Neq; j++)
+                    a[j] = CDll1.Rand(0.0, Max);
+                
+                individuals.Add(Copy(a));
             }
+        }
+
+        double[] Copy(double[] arr)
+        {
+            double[] res = new double[arr.Length];
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                res[i] = arr[i];
+            }
+            return res;
         }
 
         public void Crossing()
         {
 
             int i1, i2;
-            int[] f1 = new int[Neq];
-            int[] f2 = new int[Neq];
+            double[] f1 = new double[Neq];
+            double[] f2 = new double[Neq];
 
             for (int i = 0; i < CrossingConst; i++)
             {
@@ -62,7 +76,7 @@ namespace BHproject
             }
         }
 
-        public void CrossingOver(int[] p1, int[] p2, int[] f1, int[] f2)
+        public void CrossingOver(double[] p1, double[] p2, double[] f1, double[] f2)
         {
             int number_of_crossing = (int)CDll1.Rand(0, Neq);
 
@@ -83,7 +97,7 @@ namespace BHproject
 
            
             //in the bit of crossing
-            int point_of_crossing = (int)CDll1.Rand(1, Bits1);
+            int point_of_crossing = (int)CDll1.Rand(1, 10);
             int x = 0, y = 0;
 
             for (int i = point_of_crossing; i < Bits1; i++)
@@ -92,15 +106,16 @@ namespace BHproject
             for (int i = 0; i < point_of_crossing; i++)
                 y += (int)Math.Pow(2, i);
 
-            f1[number_of_crossing] = ((tempp1 & x) + (tempp2 & y)) / 100.0;
+            f1[number_of_crossing] = ((tempp1 & x) + (tempp2 & y)) / 100.0; 
             f2[number_of_crossing] = ((tempp2 & x) + (tempp1 & y)) / 100.0;
 
         }
 
         public void Mutations()
         {
-            int p, x = 0;
+            int p, x = 0, y = 0;
             int number_of_mutation, point_of_mutation;
+            long a;
 
             for (int i = 0; i < individuals.Count; i++)
             {
@@ -109,37 +124,52 @@ namespace BHproject
                 {
                     if (p % 2 == 0)
                     {
-                        number_of_mutation = (int)CDll1.Rand(1, Neq);
+                        /*number_of_mutation = (int)CDll1.Rand(1, Neq);
                         point_of_mutation = (int)CDll1.Rand(1, Bits - 1);
 
                         x = (int)Math.Pow(2, point_of_mutation);
                         individuals[i][number_of_mutation] = (individuals[i][number_of_mutation] >> (point_of_mutation + 1)) << (point_of_mutation + 1) + (individuals[i][number_of_mutation] << (Bits - point_of_mutation + 2)) >> (Bits - point_of_mutation + 2) + (~(individuals[i][number_of_mutation] & x)) & x;
+                         * */
+                        number_of_mutation = (int)CDll1.Rand(1, Neq);
+                        point_of_mutation = (int)CDll1.Rand(1, 10);
+                        a = Convert.ToInt64(individuals[i][number_of_mutation]);
+
+                        x = 0;
+                        for (int j = 0; j < point_of_mutation; j++)
+                            x += (int)Math.Pow(2, j);
+
+                        y = 0;
+                        for (int j = point_of_mutation + 1; j < Bits - 1; j++)
+                            y += (int)Math.Pow(2, j);
+
+                        individuals[i][number_of_mutation] = ((x & a) + (y & a) + ((~a) & ((int)Math.Pow(2, point_of_mutation))))/100.0;//has been already checked; true
                     }
                     else
                     {
+                        point_of_mutation = (int)CDll1.Rand(1, Bits - 1);
                         number_of_mutation = (int)CDll1.Rand(1, Neq);
-                        individuals[i][number_of_mutation] += 1;
+                        individuals[i][number_of_mutation] += Math.Pow(2, point_of_mutation);
                     }
                 }
             }
         }
 
-        public int Selection()//ОПТИМИЗИРОВАТЬ ЭТОТ КОШМАР
+        public int Selection()
         {
             //fitness
             List<double> fitness = new List<double>();
             for (int i = 0; i < individuals.Count; i++)
                 fitness.Add(dF(individuals[i]));
-
+            //fitness.Min - the most closest
             //check convergence
             if (fitness.Min() <= E)
                 return fitness.LastIndexOf(fitness.Min());
 
-            int eliteIndividuals = Convert.ToInt16(individuals.Count * elite);
-            int unluckyIndividuals = Convert.ToInt16(individuals.Count * unluckiers);
+            int eliteIndividuals = Convert.ToInt32(individuals.Count * elite);
+            int unluckyIndividuals = Convert.ToInt32(individuals.Count * unluckiers);
 
             List<double> TempFitness = new List<double>(fitness);
-            List<int[]> Tempind = new List<int[]>();
+            List<double[]> Tempind = new List<double[]>();
 
             int ind = 0;
             
@@ -161,13 +191,13 @@ namespace BHproject
 
             int new_ind = individuals.Count - Tempind.Count;
 
-            this.individuals = new List<int[]>(Tempind);
+            this.individuals = new List<double[]>(Tempind);
             GenerateNewIndividuals(new_ind);
 
             return -1;
         }
 
-        public int[] Start()
+        public double[] Start()
         {
             GenerateNewIndividuals(startN);
             Crossing();
@@ -185,11 +215,16 @@ namespace BHproject
             return individuals[result];
         }
 
-        public double dF(int[] a)
+        public double dF(double[] arr)
         {
-            //y = x^2 + 1
+            double dy2 = 0;
+            //answer: y = 2x^2 + 1
+            for (int i = 0; i < Function.Length/2; i++)
+            {
+                dy2 += Math.Pow(Function[i, 1] - (arr[0] * Function[i, 0] * Function[i, 1] + arr[1]), 2);
+            }
 
-            return 0.0;
+            return dy2;
         }
 
     }

@@ -590,6 +590,7 @@ namespace BHproject
         {
             String path;
             IFormatter formatter = new BinaryFormatter();
+
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
 
@@ -630,6 +631,7 @@ namespace BHproject
                     {
                         phi = new double[Nphotons];
                         theta = new double[Nphotons];
+                        energies = new double[Nphotons];
 
                         progressBar3.PerformStep();
                         Energies.Clear();
@@ -651,7 +653,8 @@ namespace BHproject
                             LsodarDll.Lsodar1(ref g, ref i, ref Nphotons, theta, phi, energies, rc);
                             progressBar2.PerformStep();
                         }
-
+                        if (energies.Length > 0)
+                        {
                         for (int j = 0; j < Nphotons; j++)
                         {
                             if (rc[j] == 0)
@@ -659,10 +662,10 @@ namespace BHproject
                                 Angles.Add(theta[j]);
                                 Energies.Add(energies[j] * 100.0);
                             }
-                        }
 
-                        formatter.Serialize(stream, new ObjectsDB(i, new List<double>(Energies), new List<double>(Angles)));
-                     //   GraphicsResults.Add(new ObjectsDB(i, new List<double>(Energies), new List<double>(Angles)));
+                        }
+                        formatter.Serialize(stream, new ObjectsDB(Nphotons, i, new List<double>(Energies), new List<double>(Angles)));  
+                        }
                     }
 
                     textBox4.Text = Convert.ToString(DateTime.Now - dt);
@@ -729,6 +732,14 @@ namespace BHproject
         {
             GeneticsTests f2 = new GeneticsTests();
             f2.ShowDialog();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            double[] result = GeneticsTestsFull.TestSquareFunc();
+
+            foreach (double x in result)
+                textBox6.Text += Convert.ToString(x) + Environment.NewLine;
         }
     }
 }
